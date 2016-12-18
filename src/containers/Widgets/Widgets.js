@@ -3,10 +3,11 @@ import Helmet from 'react-helmet';
 import {connect} from 'react-redux';
 import * as widgetActions from 'redux/modules/widgets';
 import {isLoaded, load as loadWidgets} from 'redux/modules/widgets';
+import * as jobActions from 'redux/modules/data';
 import {initializeWithKey} from 'redux-form';
 import { WidgetForm } from 'components';
 import { asyncConnect } from 'redux-async-connect';
-
+import { bindActionCreators } from 'redux';
 @asyncConnect([{
   deferred: true,
   promise: ({store: {dispatch, getState}}) => {
@@ -22,7 +23,8 @@ import { asyncConnect } from 'redux-async-connect';
     error: state.widgets.error,
     loading: state.widgets.loading
   }),
-  {...widgetActions, initializeWithKey })
+  (dispatch) => bindActionCreators({...widgetActions, initializeWithKey, ...jobActions }, dispatch),
+)
 export default class Widgets extends Component {
   static propTypes = {
     widgets: PropTypes.array,
@@ -31,6 +33,7 @@ export default class Widgets extends Component {
     initializeWithKey: PropTypes.func.isRequired,
     editing: PropTypes.object.isRequired,
     load: PropTypes.func.isRequired,
+    loadJobs: PropTypes.func,
     editStart: PropTypes.func.isRequired
   };
 
@@ -39,7 +42,7 @@ export default class Widgets extends Component {
       const {editStart} = this.props; // eslint-disable-line no-shadow
       return () => editStart(String(widget.id));
     };
-    const {widgets, error, editing, loading, load} = this.props;
+    const {widgets, error, editing, loading, loadJobs} = this.props;
     let refreshClassName = 'fa fa-refresh';
     if (loading) {
       refreshClassName += ' fa-spin';
@@ -49,7 +52,7 @@ export default class Widgets extends Component {
       <div className={styles.widgets + ' container'}>
         <h1>
           Widgets
-          <button className={styles.refreshBtn + ' btn btn-success'} onClick={load}>
+          <button className={styles.refreshBtn + ' btn btn-success'} onClick={() => loadJobs('home')}>
             <i className={refreshClassName}/> {' '} Reload Widgets
           </button>
         </h1>

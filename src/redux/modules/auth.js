@@ -9,7 +9,12 @@ const LOGOUT_SUCCESS = 'redux-example/auth/LOGOUT_SUCCESS';
 const LOGOUT_FAIL = 'redux-example/auth/LOGOUT_FAIL';
 
 const initialState = {
-  loaded: false
+  loaded: false,
+  token: null,
+  userName: null,
+  isAuthenticated: false,
+  isAuthenticating: false,
+  statusText: null
 };
 
 export default function reducer(state = initialState, action = {}) {

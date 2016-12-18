@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import surveyValidation from './surveyValidation';
 import * as surveyActions from 'redux/modules/survey';
+import Editor from 'components/Editor';
 
 function asyncValidate(data, dispatch, {isValidEmail}) {
   if (!data.email) {
@@ -11,12 +12,14 @@ function asyncValidate(data, dispatch, {isValidEmail}) {
   }
   return isValidEmail(data);
 }
-@connect(() => ({}),
+@connect((state) => ({
+  createError: state.data.createError
+}),
   dispatch => bindActionCreators(surveyActions, dispatch)
 )
 @reduxForm({
   form: 'survey',
-  fields: ['name', 'email', 'occupation', 'currentlyEmployed', 'sex'],
+  fields: ['title', 'city', 'salary', 'allowRemote', 'howToApply', 'companyName', 'companyUrl', 'companyEmail'],
   validate: surveyValidation,
   asyncValidate,
   asyncBlurFields: ['email']
@@ -29,6 +32,8 @@ class SurveyForm extends Component {
     fields: PropTypes.object.isRequired,
     dirty: PropTypes.bool.isRequired,
     handleSubmit: PropTypes.func.isRequired,
+    createError: PropTypes.string,
+    onEditorChange: PropTypes.func.isRequired,
     resetForm: PropTypes.func.isRequired,
     invalid: PropTypes.bool.isRequired,
     pristine: PropTypes.bool.isRequired,
@@ -37,15 +42,16 @@ class SurveyForm extends Component {
 
   render() {
     const {
+      createError,
       asyncValidating,
-      dirty,
-      fields: {name, email, occupation, currentlyEmployed, sex},
-      active,
+      // dirty,
+      fields: {title, city, salary, allowRemote, howToApply, companyName, companyUrl, companyEmail},
+      // active,
       handleSubmit,
-      invalid,
+      // invalid,
       resetForm,
-      pristine,
-      valid
+      // pristine,
+      // valid
       } = this.props;
     const styles = require('./SurveyForm.scss');
     const renderInput = (field, label, showAsyncValidating) =>
@@ -66,25 +72,38 @@ class SurveyForm extends Component {
 
     return (
       <div>
+        {createError && <div className="text-danger">{createError}</div>}
         <form className="form-horizontal" onSubmit={handleSubmit}>
-          {renderInput(name, 'Full Name')}
-          {renderInput(email, 'Email', true)}
-          {renderInput(occupation, 'Occupation')}
+          {renderInput(title, 'Job Title')}
+          {renderInput(city, 'City/Town', true)}
+          {renderInput(salary, 'Salary (optional)')}
           <div className="form-group">
-            <label htmlFor="currentlyEmployed" className="col-sm-2">Currently Employed?</label>
+            <label htmlFor="allowRemote" className="col-sm-2">Allow telecommuting?</label>
             <div className="col-sm-8">
-              <input type="checkbox" id="currentlyEmployed" {...currentlyEmployed}/>
+              <input type="checkbox" id="allowRemote" {...allowRemote}/>
             </div>
           </div>
+
           <div className="form-group">
-            <label className="col-sm-2">Sex</label>
-            <div className="col-sm-8">
-              <input type="radio" id="sex-male" {...sex} value="male" checked={sex.value === 'male'}/>
-              <label htmlFor="sex-male" className={styles.radioLabel}>Male</label>
-              <input type="radio" id="sex-female" {...sex} value="female" checked={sex.value === 'female'}/>
-              <label htmlFor="sex-female" className={styles.radioLabel}>Female</label>
+            <div className="col-sm-10">
+              <label className="">Job Description</label>
+              <Editor onEditorChange={this.props.onEditorChange}/>
             </div>
           </div>
+
+          <div className="form-group">
+            <div className="col-sm-10">
+              <label className="">How do people apply for this job?</label>
+              <span className="help-block">Example: Send a resume to thapelo@company.com</span>
+              <textarea className="form-control" id="howToApply" {...howToApply}></textarea>
+            </div>
+          </div>
+          <hr/>
+          <h3>Tell us about your company</h3>
+          {renderInput(companyName, 'Company Name', true)}
+          {renderInput(companyUrl, 'URL', true)}
+          {renderInput(companyEmail, 'Email', true)}
+
           <div className="form-group">
             <div className="col-sm-offset-2 col-sm-10">
               <button className="btn btn-success" onClick={handleSubmit}>
@@ -97,7 +116,7 @@ class SurveyForm extends Component {
           </div>
         </form>
 
-        <h4>Props from redux-form</h4>
+        { /* <h4>Props from redux-form</h4>
 
         <table className="table table-striped">
           <tbody>
@@ -122,7 +141,7 @@ class SurveyForm extends Component {
             <td className={invalid ? 'success' : 'danger'}>{invalid ? 'true' : 'false'}</td>
           </tr>
           </tbody>
-        </table>
+        </table> */ }
       </div>
     );
   }

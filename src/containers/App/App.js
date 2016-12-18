@@ -82,10 +82,10 @@ export default class App extends Component {
               </LinkContainer>}
 
               <LinkContainer to="/widgets">
-                <NavItem eventKey={2}>Widgets</NavItem>
+                <NavItem eventKey={2}>My Jobs</NavItem>
               </LinkContainer>
               <LinkContainer to="/survey">
-                <NavItem eventKey={3}>Survey</NavItem>
+                <NavItem eventKey={3}>Create a Job</NavItem>
               </LinkContainer>
               <LinkContainer to="/about">
                 <NavItem eventKey={4}>About Us</NavItem>
@@ -93,7 +93,7 @@ export default class App extends Component {
 
               {!user &&
               <LinkContainer to="/login">
-                <NavItem eventKey={5}>Login</NavItem>
+                <NavItem eventKey={5}>Employers</NavItem>
               </LinkContainer>}
               {user &&
               <LinkContainer to="/logout">
@@ -104,6 +104,15 @@ export default class App extends Component {
             </Nav>
             {user &&
             <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.name}</strong>.</p>}
+            {user &&
+            <Nav navbar>
+              <LinkContainer to="/new">
+                <NavItem eventKey={1}>Post a Job</NavItem>
+              </LinkContainer>
+              <LinkContainer to="/me">
+                <NavItem eventKey={2}>My Jobs</NavItem>
+              </LinkContainer>
+            </Nav>}
             <Nav navbar pullRight>
               <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/erikras/react-redux-universal-hot-example">
                 <i className="fa fa-github"/>

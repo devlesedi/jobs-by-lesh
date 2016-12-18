@@ -3,4 +3,6 @@ export loadAuth from './loadAuth';
 export login from './login';
 export logout from './logout';
 export * as widget from './widget/index';
+export * as me from './me/index';
 export * as survey from './survey/index';
+export * as jobs from './jobs/index';

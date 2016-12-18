@@ -3,60 +3,78 @@ import {connect} from 'react-redux';
 import Helmet from 'react-helmet';
 import {initialize} from 'redux-form';
 import {SurveyForm} from 'components';
+import { push } from 'react-router-redux';
+import {create} from 'redux/modules/data';
 
 @connect(
-  () => ({}),
-  {initialize})
+  (state) => ({
+    created: state.data.created
+  }),
+  {initialize, create, pushState: push})
 export default class Survey extends Component {
   static propTypes = {
-    initialize: PropTypes.func.isRequired
+    initialize: PropTypes.func.isRequired,
+    create: PropTypes.func.isRequired,
+    created: PropTypes.bool,
+    pushState: PropTypes.func.isRequired
+  }
+
+  state = {
+    content: ''
   }
 
   handleSubmit = (data) => {
-    window.alert('Data submitted! ' + JSON.stringify(data));
-    this.props.initialize('survey', {});
+    const handleOnSuccess = () => {
+      setTimeout(() => {
+        this.props.initialize('survey', {});
+        this.props.pushState('/');
+      }, 3000);
+    };
+    data.description = this.state.content;
+    console.log('Data submitted! ' + JSON.stringify(data));
+    this.props.create(data)
+    .then(response => {
+      handleOnSuccess();
+      console.log(response);
+    })
+    .catch((error) => {
+      console.log('ok then error', error);
+    });
   }
 
   handleInitialize = () => {
     this.props.initialize('survey', {
-      name: 'Little Bobby Tables',
-      email: 'bobby@gmail.com',
-      occupation: 'Redux Wizard',
-      currentlyEmployed: true,
-      sex: 'male'
+      title: 'Little Bobby Tables',
+      companyEmail: 'bobby@gmail.com',
+      companyName: 'Bobby Biggs',
+      salary: 'Redux Wizard',
+      allowRemote: true,
+      city: 'Sex in the city',
+      howToApply: 'Send a resume to thapelo@company.com'
     });
   }
 
+  handleEditorChange = (content) => {
+    if (content) {
+      this.setState({
+        content
+      });
+    }
+  }
+
   render() {
+    const {created} = this.props;
     return (
       <div className="container">
-        <h1>Survey</h1>
-        <Helmet title="Survey"/>
-
         <p>
-          This is an example of a form in redux in which all the state is kept within the redux store.
-          All the components are pure "dumb" components.
+          Your job listing will remain on this site for 30 days. After 30 days your job listing will expire and be removed.
         </p>
-
+        <h1>Step 1: Create your Ad</h1>
+        <Helmet title="Step 1: Create your Ad"/>
+        <hr/>
+        <h3>First tell us about the position</h3>
         <p>
-          Things to notice:
-        </p>
-
-        <ul>
-          <li>No validation errors are shown initially.</li>
-          <li>Validation errors are only shown onBlur</li>
-          <li>Validation errors are hidden onChange when the error is rectified</li>
-          <li><code>valid</code>, <code>invalid</code>, <code>pristine</code> and <code>dirty</code> flags
-            are passed with each change
-          </li>
-          <li><em>Except</em> when you submit the form, in which case they are shown for all invalid fields.</li>
-          <li>If you click the Initialize Form button, the form will be prepopupated with some values and
-            the <code>pristine</code> and <code>dirty</code> flags will be based on those values.
-          </li>
-        </ul>
-
-        <p>
-          Pardon the use of <code>window.alert()</code>, but I wanted to keep this component stateless.
+          If you need a <code>programmer</code> please use keywords like <code>android</code>, <code>web</code>, <code>apps</code>, <code>data science</code>
         </p>
 
         <div style={{textAlign: 'center', margin: 15}}>
@@ -64,11 +82,8 @@ export default class Survey extends Component {
             <i className="fa fa-pencil"/> Initialize Form
           </button>
         </div>
-
-        <p>The circles to the left of the inputs correspond to flags provided by <code>redux-form</code>:
-          Touched, Visited, Active, and Dirty.</p>
-
-        <SurveyForm onSubmit={this.handleSubmit}/>
+        {created ? <div style={{textAlign: 'center', margin: 15}}><h2 className="text-success">Job saved successfully!</h2></div> :
+        <SurveyForm onSubmit={this.handleSubmit} onEditorChange={this.handleEditorChange}/>}
       </div>
     );
   }
