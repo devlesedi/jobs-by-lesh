@@ -11,7 +11,7 @@ import {create} from 'redux/modules/data';
     created: state.data.created
   }),
   {initialize, create, pushState: push})
-export default class Survey extends Component {
+export default class NewPost extends Component {
   static propTypes = {
     initialize: PropTypes.func.isRequired,
     create: PropTypes.func.isRequired,
@@ -44,12 +44,12 @@ export default class Survey extends Component {
 
   handleInitialize = () => {
     this.props.initialize('survey', {
-      title: 'Little Bobby Tables',
-      companyEmail: 'bobby@gmail.com',
-      companyName: 'Bobby Biggs',
-      salary: 'Redux Wizard',
+      title: 'Sample Title',
+      companyEmail: 'company@gmail.com',
+      companyName: 'Company Name',
+      salary: '$80k-$110k',
       allowRemote: true,
-      city: 'Sex in the city',
+      city: 'Kingdom Come',
       howToApply: 'Send a resume to thapelo@company.com'
     });
   }
@@ -66,22 +66,16 @@ export default class Survey extends Component {
     const {created} = this.props;
     return (
       <div className="container">
-        <p>
-          Your job listing will remain on this site for 30 days. After 30 days your job listing will expire and be removed.
-        </p>
         <h1>Step 1: Create your Ad</h1>
         <Helmet title="Step 1: Create your Ad"/>
+        <p>Your job listing will remain on this site for 30 days. After 30 days your job listing will expire and be removed.</p>
         <hr/>
         <h3>First tell us about the position</h3>
-        <p>
-          If you need a <code>programmer</code> please use keywords like <code>android</code>, <code>web</code>, <code>apps</code>, <code>data science</code>
-        </p>
-
-        <div style={{textAlign: 'center', margin: 15}}>
+        { /* <div style={{textAlign: 'center', margin: 15}}>
           <button className="btn btn-primary" onClick={this.handleInitialize}>
             <i className="fa fa-pencil"/> Initialize Form
           </button>
-        </div>
+        </div> */ }
         {created ? <div style={{textAlign: 'center', margin: 15}}><h2 className="text-success">Job saved successfully!</h2></div> :
         <SurveyForm onSubmit={this.handleSubmit} onEditorChange={this.handleEditorChange}/>}
       </div>

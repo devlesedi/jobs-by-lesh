@@ -8,7 +8,7 @@ import NavItem from 'react-bootstrap/lib/NavItem';
 import Helmet from 'react-helmet';
 import { isLoaded as isInfoLoaded, load as loadInfo } from 'redux/modules/info';
 import { isLoaded as isAuthLoaded, load as loadAuth, logout } from 'redux/modules/auth';
-import { InfoBar } from 'components';
+// import { InfoBar } from 'components';
 import { push } from 'react-router-redux';
 import config from '../../config';
 import { asyncConnect } from 'redux-async-connect';
@@ -69,7 +69,7 @@ export default class App extends Component {
             <Navbar.Brand>
               <IndexLink to="/" activeStyle={{color: '#33e0ff'}}>
                 <div className={styles.brand}/>
-                <span>{config.app.title}</span>
+                <span>Jobs 4 Geeks BW</span>
               </IndexLink>
             </Navbar.Brand>
             <Navbar.Toggle/>
@@ -77,42 +77,15 @@ export default class App extends Component {
 
           <Navbar.Collapse eventKey={0}>
             <Nav navbar>
-              {user && <LinkContainer to="/chat">
-                <NavItem eventKey={1}>Chat</NavItem>
-              </LinkContainer>}
-
-              <LinkContainer to="/widgets">
-                <NavItem eventKey={2}>My Jobs</NavItem>
-              </LinkContainer>
-              <LinkContainer to="/survey">
-                <NavItem eventKey={3}>Create a Job</NavItem>
+              <LinkContainer to="/new">
+                <NavItem eventKey={2}>Post a Job - $0</NavItem>
               </LinkContainer>
               <LinkContainer to="/about">
-                <NavItem eventKey={4}>About Us</NavItem>
+                <NavItem eventKey={3}>About Us</NavItem>
               </LinkContainer>
-
-              {!user &&
-              <LinkContainer to="/login">
-                <NavItem eventKey={5}>Employers</NavItem>
-              </LinkContainer>}
-              {user &&
-              <LinkContainer to="/logout">
-                <NavItem eventKey={6} className="logout-link" onClick={this.handleLogout}>
-                  Logout
-                </NavItem>
-              </LinkContainer>}
             </Nav>
             {user &&
             <p className={styles.loggedInMessage + ' navbar-text'}>Logged in as <strong>{user.name}</strong>.</p>}
-            {user &&
-            <Nav navbar>
-              <LinkContainer to="/new">
-                <NavItem eventKey={1}>Post a Job</NavItem>
-              </LinkContainer>
-              <LinkContainer to="/me">
-                <NavItem eventKey={2}>My Jobs</NavItem>
-              </LinkContainer>
-            </Nav>}
             <Nav navbar pullRight>
               <NavItem eventKey={1} target="_blank" title="View on Github" href="https://github.com/erikras/react-redux-universal-hot-example">
                 <i className="fa fa-github"/>
@@ -124,13 +97,11 @@ export default class App extends Component {
         <div className={styles.appContent}>
           {this.props.children}
         </div>
-        <InfoBar/>
 
-        <div className="well text-center">
+        <div className="container text-center">
           Have questions? Ask for help <a
           href="https://github.com/erikras/react-redux-universal-hot-example/issues"
-          target="_blank">on Github</a> or in the <a
-          href="https://discord.gg/0ZcbPKXt5bZZb1Ko" target="_blank">#react-redux-universal</a> Discord channel.
+          target="_blank">on Github</a>.
         </div>
       </div>
     );

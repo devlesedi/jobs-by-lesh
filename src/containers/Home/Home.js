@@ -1,8 +1,9 @@
 import React, { Component, PropTypes } from 'react';
 // import { Link } from 'react-router';
-import { CounterButton } from 'components';
 // import config from '../../config';
 import Helmet from 'react-helmet';
+import Jumbotron from 'react-bootstrap/lib/Jumbotron';
+import Button from 'react-bootstrap/lib/Button';
 import { push } from 'react-router-redux';
 import {connect} from 'react-redux';
 import {isFrontLoaded, load as loadJobs} from 'redux/modules/data';
@@ -34,18 +35,19 @@ export default class Home extends Component {
     dispatch: PropTypes.func,
     initializeWithKey: PropTypes.func.isRequired,
     load: PropTypes.func.isRequired,
+    loadMore: PropTypes.func.isRequired,
   };
 
   viewJob(id) {
     this.props.dispatch(push(`/job/${id}`));
   }
 
-  loadMore() {
-    // this.props.onScrollToBottom();
+  goToAboutPage() {
+    this.props.dispatch(push('/about'));
   }
 
   render() {
-    const {jobs} = this.props;
+    const {jobs, loadMore} = this.props;
     const styles = require('./Home.scss');
     // require the logo image both from client and server
     // const logoImage = require('./logo.png');
@@ -54,12 +56,11 @@ export default class Home extends Component {
         <Helmet title="Home"/>
 
         <div className="container">
-          <div className={styles.counterContainer}>
-            <CounterButton multireducerKey="counter1"/>
-            <CounterButton multireducerKey="counter2"/>
-            <CounterButton multireducerKey="counter3"/>
-          </div>
-
+          <Jumbotron>
+            <h1>Hello, world!</h1>
+            <p>This is a simple job posting web app built using React, Redux, Webpack, and a Parse backend</p>
+            <p><Button bsStyle="primary" onClick={this.goToAboutPage.bind(this)}>Learn more</Button></p>
+          </Jumbotron>
           <div className="margin-top-medium">
             <div className="row">
               <div className="col-md-12">
@@ -69,15 +70,14 @@ export default class Home extends Component {
                       <li id="partner_ad_713" className="partner_ad list-group-item">
                         <i className="fa fa-external-link pull-right"></i>
                         <span className="badge">
-                          <span className="job_type">Job Type</span>
+                          <span className="job_type">{item.type}</span>
                           <span className="badge_pipe"> | </span>
                           <span className="job_location">{item.remote ? 'Remote' : item.location}</span>
                         </span>
                         <h4 className="list-group-item-heading">
                           <b className="title">{item.title}</b>
-                          <span className="company">{` at ${item.company}`}</span>
                         </h4>
-                        <p className="subtitle list-group-item-text">subtitle</p>
+                        <p className="subtitle list-group-item-text">{` at ${item.company}`} {item.salary ? ` | ${item.salary}` : '' } {item.created_at ? ` | ${item.created_at}` : '' }</p>
                       </li>
                     </a>
                   </ul>);
@@ -86,7 +86,7 @@ export default class Home extends Component {
             </div>
           </div>
           <div className="margin-top-medium text-center">
-              <button className="btn btn-default" onClick={this.loadMore}>Load More</button>
+              <button className="btn btn-default" onClick={loadMore}>Load More</button>
           </div>
         </div>
       </div>

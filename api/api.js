@@ -7,6 +7,7 @@ import {mapUrl} from 'utils/url.js';
 import PrettyError from 'pretty-error';
 import http from 'http';
 import SocketIo from 'socket.io';
+import Parse from 'parse/node';
 
 const pretty = new PrettyError();
 const app = express();
@@ -24,6 +25,11 @@ app.use(session({
 }));
 app.use(bodyParser.json());
 
+var PARSE_APP_ID = process.env.APP_ID,
+    PARSE_SERVER_URL = process.env.SERVER_URL || 'http://localhost:1337/parse';
+
+Parse.initialize(PARSE_APP_ID);
+Parse.serverURL = PARSE_SERVER_URL;
 
 app.use((req, res) => {
   const splittedUrlPath = req.url.split('?')[0].split('/').slice(1);

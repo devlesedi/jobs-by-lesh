@@ -1,22 +1,27 @@
+var Parse = require('parse/node');
+var moment = require('moment');
+
+function getJob(id) {
+
+  var query = new Parse.Query("Job");
+
+  return query.get(id, {
+    success: function(object) {
+      return object;
+    },
+
+    error: function(object, error) {
+      return;
+    }
+  });
+}
+
 export default function get(req) {
   return new Promise((resolve, reject) => {
-    let job = {
-      "id": "4dfg99sd",
-      "allowRemote": true,
-      "city":"Sex in the city",
-      "companyEmail":"bobby@gmail.com",
-      "companyName":"Bobby Biggs",
-      "description":"<div>jkjkj</div>",
-      "howToApply":"Send a resume to thapelo@company.com",
-      "salary":"Redux Wizard",
-      "title":"Little Bobby Tables"
-    };
-    // TODO: This matches evevrything :(
-    var idMatch = req.url.match(/\/jobs\/get\/([0-9a-z]{2})/g)
-    var id = RegExp.$1
+    var idMatch = req.url.match(/\/jobs\/get\/([0-9A-Za-z]{10}$)/i)
     if (idMatch) {
-      console.log('params', id);
-      resolve(job);
+      var id = idMatch[1];
+      resolve(getJob(id));
     } else {
       reject("Nope!");
     }

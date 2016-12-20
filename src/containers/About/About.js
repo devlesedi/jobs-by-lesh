@@ -10,19 +10,11 @@ export default class About extends Component {
   handleToggleKitten = () => this.setState({showKitten: !this.state.showKitten});
 
   render() {
-    const {showKitten} = this.state;
-    const kitten = require('./kitten.jpg');
     return (
       <div className="container">
         <h1>About Us</h1>
         <Helmet title="About Us"/>
         <ul>
-          <li>
-            <del>Isomorphic</del>
-            {' '}
-            <a href="https://medium.com/@mjackson/universal-javascript-4761051b7ae9">Universal</a> rendering
-          </li>
-          <li>Both client and server make calls to load data from separate API server</li>
           <li><a href="https://github.com/facebook/react" target="_blank">React</a></li>
           <li><a href="https://github.com/rackt/react-router" target="_blank">React Router</a></li>
           <li><a href="http://expressjs.com" target="_blank">Express</a></li>
@@ -57,18 +49,6 @@ export default class About extends Component {
           <li><a href="http://socket.io/">socket.io</a> for real-time communication</li>
         </ul>
 
-        <h3>Images</h3>
-
-        <p>
-          Psst! Would you like to see a kitten?
-
-          <button className={'btn btn-' + (showKitten ? 'danger' : 'success')}
-                  style={{marginLeft: 50}}
-                  onClick={this.handleToggleKitten}>
-            {showKitten ? 'No! Take it away!' : 'Yes! Please!'}</button>
-        </p>
-
-        {showKitten && <div><img src={kitten}/></div>}
       </div>
     );
   }

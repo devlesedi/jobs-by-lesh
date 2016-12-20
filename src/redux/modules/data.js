@@ -1,9 +1,5 @@
 import {
-  // LOADED_JOB,
-  // FETCH_SUCCESS,
-  // JOB_LOADING,
   FETCH_REQUEST,
-  // FETCH_FAIL,
   TIMELINE_EXPAND_SUCCESS,
   // TIMELINE_EXPAND_FAIL,
   // COMMENT_SUBMIT_REQUEST,
@@ -54,9 +50,9 @@ const initialState = {
 
 function loadQuery(timeline, skip) {
   return {
-    types: [LOAD, LOAD_SUCCESS, LOAD_FAIL],
+    types: [LOAD, TIMELINE_EXPAND_SUCCESS, LOAD_FAIL],
     timeline,
-    promise: (client) => client.get('/jobs/filter', { params: {skip: skip} }) // params not used, just shown as demonstration
+    promise: (client) => client.get('/jobs/frontpage', { params: {skip: skip} }) // params not used, just shown as demonstration
   };
 }
 
@@ -89,7 +85,7 @@ export function loadMore(timeline) {
 
 export function get(id) {
   return {
-    types: [LOAD, LOAD_JOB_SUCCESS, LOAD_FAIL],
+    types: [LOAD_JOB, LOAD_JOB_SUCCESS, LOAD_JOB_FAIL],
     id,
     promise: (client) => client.get(`/jobs/get/${id}`) // params not used, just shown as demonstration
   };
@@ -125,8 +121,10 @@ export default function reducer(state = initialState, action = {}) {
       return {
         ...state,
         loading: false,
-        loadedMyJobs: true,
-        myJobs: action.result,
+        home: [
+          ...state.home,
+          ...action.result
+        ],
         error: null
       };
     case LOAD_FAIL:
@@ -134,7 +132,6 @@ export default function reducer(state = initialState, action = {}) {
         ...state,
         loading: false,
         loaded: false,
-        loadedMyJobs: false,
         data: null,
         home: null,
         error: action.error

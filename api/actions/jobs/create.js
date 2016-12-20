@@ -1,19 +1,27 @@
-// import load from './load';
+var Parse = require('parse/node');
+
+const Job = Parse.Object.extend('Job');
 
 export default function create(req) {
   return new Promise((resolve, reject) => {
-    // write to database
-    setTimeout(() => {
-      // const widgets = data;
-      const job = req.body;
-      if (job.city === 'Bobonong') {
-        reject('We do not accept Bobonong jobs xD');
-      }
-      // if (widget.id) {
-      //   widgets[widget.id - 1] = widget;  // id is 1-based. please don't code like this in production! :-)
-      //   req.session.widgets = widgets;
-      // }
-      resolve(job);
-    }, 1500); // simulate async db write
+
+    //write to database
+    const body = req.body;
+    //validations
+    // if (job.city === 'wysiwyg') {
+    //   reject('We do not accept jobs from wysiwyg xD');
+    // }
+    const newJob = new Job(body);
+      return newJob.save()
+        .then((response) => {
+          resolve(response);
+        })
+        .catch((error) => {
+          console.error('error', error);
+          if (error.response.status === 401) {
+            // handle unauthorized
+          }
+          reject(error);
+        })
   });
 }
