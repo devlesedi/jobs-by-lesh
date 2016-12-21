@@ -100,7 +100,7 @@ export default class App extends Component {
 
         <div className="container text-center">
           Have questions? Ask for help <a
-          href="https://github.com/erikras/react-redux-universal-hot-example/issues"
+          href="https://github.com/devlesedi/jobs-by-lesh/issues"
           target="_blank">on Github</a>.
         </div>
       </div>
